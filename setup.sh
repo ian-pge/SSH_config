@@ -18,7 +18,7 @@ echo "Activating configuration..."
 echo "Linking zsh binary to /bin/zsh..."
 sudo ln -sf ~/.nix-profile/bin/zsh /bin/zsh
 
-echo "Changing default shell for user 'zed' to zsh..."
+echo "Changing default shell for user to zsh..."
 sudo usermod -s /bin/zsh $(whoami)
 
 echo "Setup complete."
