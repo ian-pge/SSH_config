@@ -4,7 +4,7 @@ echo "Installing Nix..."
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
 echo "Sourcing Nix profile..."
-. /home/zed/.nix-profile/etc/profile.d/nix.sh
+. ~/.nix-profile/etc/profile.d/nix.sh
 
 echo "Building flake..."
 nix build .#homeConfigurations.zed.activationPackage \
