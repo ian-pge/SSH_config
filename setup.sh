@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Don't forget to check that LD_LIBRARY_PATH is unset or nix won't work
+
 echo "Installing Nix..."
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
