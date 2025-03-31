@@ -56,6 +56,9 @@
               . "$HOME/.nix-profile/etc/profile.d/nix.sh"
               export TERM=xterm-256color
               bindkey -v
+              if [ -f ~/.zshrc.local ]; then
+                source ~/.zshrc.local
+              fi
             '';
           }
         ];
