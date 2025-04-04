@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Source Nix profile if not already sourced
-if [ -z "$NIX_PATH" ]; then
-  echo "Sourcing Nix profile..."
-  . ~/.nix-profile/etc/profile.d/nix.sh
-fi
-
 # Check if Nix is already installed
 if ! command -v nix > /dev/null; then
   echo "Installing Nix..."
   sh <(curl -L https://nixos.org/nix/install) --no-daemon
 else
   echo "Nix is already installed."
+fi
+
+# Source Nix profile if not already sourced
+if [ -z "$NIX_PATH" ]; then
+  echo "Sourcing Nix profile..."
+  . ~/.nix-profile/etc/profile.d/nix.sh
 fi
 
 # Build and activate Home Manager configuration only if necessary
