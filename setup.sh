@@ -1,26 +1,43 @@
 #!/bin/bash
 
-# Don't forget to check that LD_LIBRARY_PATH is unset or nix won't work
+set -e
 
-echo "Installing Nix..."
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
+# Ensure LD_LIBRARY_PATH is unset
+unset LD_LIBRARY_PATH
 
-echo "Sourcing Nix profile..."
-. ~/.nix-profile/etc/profile.d/nix.sh
+# Check if Nix is already installed
+if ! command -v nix >/dev/null 2>&1; then
+  echo "Installing Nix..."
+  sh <(curl -L https://nixos.org/nix/install) --no-daemon
+else
+  echo "Nix already installed, skipping installation."
+fi
 
-echo "Building flake..."
-nix build .#homeConfigurations.zed.activationPackage \
-  --extra-experimental-features flakes \
-  --extra-experimental-features nix-command \
-  --out-link ~/result
+# Source Nix profile if it's not already sourced
+if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  echo "Sourcing Nix profile..."
+  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
+# Only build and activate if result doesn't exist
+if [ ! -e "$HOME/result" ]; then
+  echo "Building flake..."
+  nix build .#homeConfigurations.zed.activationPackage \
+    --extra-experimental-features flakes \
+    --extra-experimental-features nix-command \
+    --out-link "$HOME/result"
+fi
 
 echo "Activating configuration..."
-~/result/activate
+"$HOME/result/activate"
 
-echo "Linking zsh binary to /bin/zsh..."
-sudo ln -sf ~/.nix-profile/bin/zsh /bin/zsh
+# Set Zsh as the default shell only if it's not already
+if [ "$(getent passwd "$(whoami)" | cut -d: -f7)" != "/bin/zsh" ]; then
+  echo "Linking zsh binary to /bin/zsh..."
+  sudo ln -sf "$HOME/.nix-profile/bin/zsh" /bin/zsh
 
-echo "Changing default shell for user to zsh..."
-sudo usermod -s /bin/zsh $(whoami)
+  echo "Changing default shell for user to zsh..."
+  sudo usermod -s /bin/zsh "$(whoami)"
+fi
 
 echo "Setup complete."
