@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
 # Check if Nix is already installed
 if ! command -v nix > /dev/null; then
   echo "Installing Nix..."
