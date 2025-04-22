@@ -17,7 +17,7 @@ trap 'echo "[ERROR] Script failed at line $LINENO. Exiting." >&2' ERR
 if [[ ! -d /nix ]]; then
   mkdir -p /nix
 fi
-sudo chown zed:zed /nix
+sudo chown -R zed:zed /nix
 chmod 0755 /nix
 
 # 1. Source Nix if it’s already installed.
