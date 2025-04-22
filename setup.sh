@@ -24,7 +24,6 @@ if ! command -v nix &>/dev/null; then
   log "Nix not found in PATH. Installing Nix..."
   # Non-interactive installation of Nix (single-user)
   curl -L https://nixos.org/nix/install | bash -s -- --no-daemon
-  sudo chown -R zed /nix
   # Source Nix again (the install just happened)
   if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
     # shellcheck source=/dev/null
