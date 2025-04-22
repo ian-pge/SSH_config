@@ -13,36 +13,36 @@ log() {
 # Error handler to display a message if any command fails
 trap 'echo "[ERROR] Script failed at line $LINENO. Exiting." >&2' ERR
 
-# 1. Source Nix if it’s already installed.
-if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
-  # shellcheck source=/dev/null
-  . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
-fi
+# # 1. Source Nix if it’s already installed.
+# if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+#   # shellcheck source=/dev/null
+#   . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+# fi
 
-# 2. Check if Nix is available; if not, install it.
-if ! command -v nix &>/dev/null; then
-  log "Nix not found in PATH. Installing Nix..."
-  # Non-interactive installation of Nix (single-user)
-  curl -L https://nixos.org/nix/install | bash -s -- --no-daemon
-  # Source Nix again (the install just happened)
-  if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
-    # shellcheck source=/dev/null
-    . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
-    log "Nix installed and sourced."
-  else
-    echo "[ERROR] Nix installation script completed, but could not source nix.sh." >&2
-    exit 1
-  fi
-else
-  log "Nix is already installed."
-fi
+# # 2. Check if Nix is available; if not, install it.
+# if ! command -v nix &>/dev/null; then
+#   log "Nix not found in PATH. Installing Nix..."
+#   # Non-interactive installation of Nix (single-user)
+#   curl -L https://nixos.org/nix/install | bash -s -- --no-daemon
+#   # Source Nix again (the install just happened)
+#   if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+#     # shellcheck source=/dev/null
+#     . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+#     log "Nix installed and sourced."
+#   else
+#     echo "[ERROR] Nix installation script completed, but could not source nix.sh." >&2
+#     exit 1
+#   fi
+# else
+#   log "Nix is already installed."
+# fi
 
-# 3. Ensure Nix profile is sourced if NIX_PATH is not set (extra safeguard).
-if [[ -z "${NIX_PATH:-}" ]]; then
-  log "Sourcing Nix profile..."
-  # shellcheck source=/dev/null
-  . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
-fi
+# # 3. Ensure Nix profile is sourced if NIX_PATH is not set (extra safeguard).
+# if [[ -z "${NIX_PATH:-}" ]]; then
+#   log "Sourcing Nix profile..."
+#   # shellcheck source=/dev/null
+#   . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+# fi
 
 # 4. Build and activate the Home Manager configuration if needed.
 if [[ ! -L "${HOME}/result" ]]; then
