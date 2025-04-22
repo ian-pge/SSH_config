@@ -13,6 +13,13 @@ log() {
 # Error handler to display a message if any command fails
 trap 'echo "[ERROR] Script failed at line $LINENO. Exiting." >&2' ERR
 
+# 1. Ensure /nix exists and is writable by 'zed'
+if [[ ! -d /nix ]]; then
+  mkdir -p /nix
+fi
+sudo chown zed:zed /nix
+chmod 0755 /nix
+
 # 1. Source Nix if it’s already installed.
 if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
   # shellcheck source=/dev/null
