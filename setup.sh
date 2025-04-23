@@ -44,6 +44,10 @@ trap 'echo "[ERROR] Script failed at line $LINENO. Exiting." >&2' ERR
 #   . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 # fi
 
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install linux --no-confirm --init none
+sudo chown -R zed:zed /nix
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
 # 4. Build and activate the Home Manager configuration if needed.
 if [[ ! -L "${HOME}/result" ]]; then
   log "Building Home Manager flake..."
