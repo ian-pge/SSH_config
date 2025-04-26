@@ -37,7 +37,7 @@ if ! command -v nix &>/dev/null; then
 
   # simlink to the store if docker has leaked in some nix stuff from the host
   if [[ -d "/nix_docker" ]]; then
-    sudo ln -s /nix2/store/* /nix/store/
+    sudo ln -s /nix_docker/store/* /nix/store/
     log "simlinking"
   fi
 
