@@ -25,7 +25,7 @@ if ! command -v nix &>/dev/null; then
   log "Nix not found in PATH. Installing Nix..."
 
   # check if docker has leaked in some nix stuff from the host
-  if [[ -f "/nix" ]]; then
+  if [[ -d "/nix" ]]; then
     sudo mv /nix /nix_docker
     log "Nix stuff has leaked from the host"
   fi
@@ -36,7 +36,7 @@ if ! command -v nix &>/dev/null; then
   . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 
   # simlink to the store if docker has leaked in some nix stuff from the host
-  if [[ -f "/nix_docker" ]]; then
+  if [[ -d "/nix_docker" ]]; then
     sudo ln -s /nix2/store/* /nix/store/
     log "simlinking"
   fi
