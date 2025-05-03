@@ -35,10 +35,10 @@ if ! command -v nix &>/dev/null; then
   # Source Nix again (the install just happened)
   . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 
-  # simlink to the store if docker has leaked in some nix stuff from the host
+  # copy to the nix store
   if [[ -d "/nix_docker" ]]; then
-    sudo ln -s /nix_docker/store/* /nix/store/
-    log "simlinking"
+    sudo cp -a /nix_docker/store/* /nix/store/
+    log "copy pkgs to nix store"
   fi
 
 else
@@ -66,17 +66,17 @@ else
 fi
 
 # 5. Make sure zsh from Nix is linked to /bin/zsh (for setting login shell).
-ZSH_LINK_TARGET="${HOME}/.nix-profile/bin/zsh"
-if [[ ! -f "/bin/zsh" ]] || [[ "$(readlink /bin/zsh 2>/dev/null || true)" != "$ZSH_LINK_TARGET" ]]; then
-  log "Linking Nix zsh to /bin/zsh..."
-  sudo ln -sf "$ZSH_LINK_TARGET" /bin/zsh
+FISH_LINK_TARGET="${HOME}/.nix-profile/bin/fish"
+if [[ ! -f "/bin/fish" ]] || [[ "$(readlink /bin/fish 2>/dev/null || true)" != "$FISH_LINK_TARGET" ]]; then
+  log "Linking Nix fish to /bin/fish..."
+  sudo ln -sf "$FISH_LINK_TARGET" /bin/fish
 fi
 
 # 6. Change default shell to zsh if not already done.
 CURRENT_SHELL="$(getent passwd "$(whoami)" | cut -d: -f7)"
-if [[ "$CURRENT_SHELL" != "/bin/zsh" ]]; then
-  log "Changing default shell to zsh..."
-  sudo usermod -s /bin/zsh "$(whoami)"
+if [[ "$CURRENT_SHELL" != "/bin/fish" ]]; then
+  log "Changing default shell to fish..."
+  sudo usermod -s /bin/fish "$(whoami)"
 fi
 
 log "Setup complete!"
